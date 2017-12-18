@@ -3,15 +3,15 @@ This webapp is designed to display a list of restaurants with their respective m
 
 ## Directory Structure
 In the GitHub …… repository you will find the following files:
-1.       *finalproject.py* – contains all the logic of the app in terms of user authorization and content
-2.       *login.py* - contains the logic in relation to the user authentication via Google or Facebook APIs
-2.       *static* folder – contains all the files necessary for the styling of the application, including bootstrap library, jquery, javascript and custom css.
-3.       *templates* folder – contains all the .html code for all the pages that allow the users to view/edit/delete the content of the app
-4.      *database_setup* file – contains the app database description
-5.      *client_secret_new.json* & *fb_client_secrets.json* - should contain the client secrets from Google and Facebook respectively necessary for the API usage
-6.      *json_format.py* - explains the serialization logic for JSON endpoints 
-7.      *restaurantmenu_fn_user.db* & *restaurantmenu_fn.db* - two databases necessary for the app 
-8.       *README.md*
+1. *finalproject.py* – contains all the logic of the app in terms of user authorization and content
+2. *login.py* - contains the logic in relation to the user authentication via Google or Facebook APIs
+3. *static* folder – contains all the files necessary for the styling of the application, including bootstrap library, jquery, javascript and custom css.
+4. *templates* folder – contains all the .html code for all the pages that allow the users to view/edit/delete the content of the app
+5. *database_setup* file – contains the app database description
+6. *client_secret_new.json* & *fb_client_secrets.json* - should contain the client secrets from Google and Facebook respectively necessary for the API usage
+7. *json_format.py* - explains the serialization logic for JSON endpoints 
+8. *restaurantmenu_fn_user.db* & *restaurantmenu_fn.db* - two databases necessary for the app 
+9. *README.md*
 
 ## Requirements
 - Please make sure that you have a 2.7 version of Python installed on your machine as the code is optimized for this version of Python. You will also need to install the Vagrant environment. Please follow the instruction on Vagrant installation [here](https://classroom.udacity.com/nanodegrees/nd004/parts/8d3e23e1-9ab6-47eb-b4f3-d5dc7ef27bf0/modules/348776022975461/lessons/3967218625/concepts/39636486110923).
@@ -23,7 +23,7 @@ In the GitHub …… repository you will find the following files:
 ## Installation
 1. Clone the Github repository
     ```
-    git clone .... <optional folder name>
+    git clone https://github.com/MissT17/udacity-restaurant-app.git <optional folder name>
     ```
 2. Move *fb_client_secrets.json* and *client_secret_new.json* into the cloned repository
 3. Open */templates/login.html* > line 49, insert your Facebook appId > save the file
