@@ -1,5 +1,5 @@
 # Restaurant Project Description
-This webapp is designed to display a list of restaurants with their respective menus and menu items available at the moment. The app allows the users to add, edit and delete restaurants as they wish.
+This webapp is designed to display a list of restaurants with their respective menus and menu items available at the moment. The app allows the users to add, edit and delete restaurants as they wish. 
 
 ## Directory Structure
 In the GitHub …… repository you will find the following files:
@@ -16,7 +16,7 @@ In the GitHub …… repository you will find the following files:
 ## Requirements
 - Please make sure that you have a 2.7 version of Python installed on your machine as the code is optimized for this version of Python. You will also need to install the Vagrant environment. Please follow the instruction on Vagrant installation [here](https://classroom.udacity.com/nanodegrees/nd004/parts/8d3e23e1-9ab6-47eb-b4f3-d5dc7ef27bf0/modules/348776022975461/lessons/3967218625/concepts/39636486110923).
 - In order to be able to test all the features of the application, you will also need Google and Facebook API keys. If you do not yet have a developer Google and Facebook accounts, please follow the instructions on how to open them below:
-    - Google account[here](https://developers.google.com/identity/sign-in/web/devconsole-project) (enable a Google+ API and indicate `http://localhost:5000/login`as 'Authorised JavaScript origins' and
+    - Google account [here](https://developers.google.com/identity/sign-in/web/devconsole-project) (enable a Google+ API and indicate `http://localhost:5000/login`as 'Authorised JavaScript origins' and
 `http://localhost:5000/gconnect` as 'Authorised redirect URIs') > download JSON and save as *client_secret_new.json* file
     - Facebook [here](https://developers.facebook.com/docs/pages/getting-started/) > open your app's dashboard and save the app ID as well as the app secret in *fb_client_secrets.json*
 
