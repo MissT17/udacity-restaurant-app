@@ -1,0 +1,25 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Delete restaurant</title>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <script src="/static/bootstrap-3.3.7-dist/js/jquery-3.2.1.min.js"></script>
+    <link rel="stylesheet" type="text/css" href="/static/bootstrap-3.3.7-dist/css/bootstrap.min.css">
+    <link rel="stylesheet" type="text/css" href="/static/bootstrap-3.3.7-dist/css/custom.css">
+    <link rel="stylesheet" type="text/css" href="/static/css/styles.css">
+    <script src="/static/bootstrap-3.3.7-dist/js/bootstrap.min.js"></script>
+    </head>  
+<body>
+    <div class="container">
+        <h3>Please confirm the deletion of {{resto_name}} restaurant from the list of restaurants</h3>
+        <br>
+        <form class="form-inline" action="{{url_for('deleteResto', resto_id=resto)}}" method='POST'>
+            <button type='Submit' class="btn btn-warning btn-block btn-lg" value='Confirm'>Confirm</button>
+        </form>
+        <br>
+        <a role="button" class= "btn btn-warning btn-block btn-lg" href="{{url_for('showallrestaurants')}}">Cancel and return to the list of restaurants</a>
+    </div>
+</body>    
+</html>

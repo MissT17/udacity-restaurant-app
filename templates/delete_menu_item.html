@@ -1,0 +1,25 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Delete menu item</title>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <script src="/static/bootstrap-3.3.7-dist/js/jquery-3.2.1.min.js"></script>
+    <link rel="stylesheet" type="text/css" href="/static/bootstrap-3.3.7-dist/css/bootstrap.min.css">
+    <link rel="stylesheet" type="text/css" href="/static/bootstrap-3.3.7-dist/css/custom.css">
+    <link href="https://fonts.googleapis.com/css?family=Calligraffitti" rel="stylesheet">
+    <link rel="stylesheet" type="text/css" href="/static/css/styles.css">
+    <script src="/static/bootstrap-3.3.7-dist/js/bootstrap.min.js"></script>
+</head>  
+<body>
+    <div class="container">
+        <h3>Please confirm the deletion of {{item_name}} from the menu of {{resto_name}}</h3>
+        <form class="form-inline" action="{{url_for('deleteMenuItem', resto_id=resto, item_id=item)}}" method='POST'>
+            <button class="btn btn-warning btn-lg btn-block" type='Submit' value='Delete'>Delete</button>
+        </form>
+        <br>
+        <a role="button" class="btn btn-warning btn-lg btn-block" href="{{url_for('restoMenu', resto_ID=resto)}}">Cancel and return to the menu</a>
+    </div>    
+</body>    
+</html>    

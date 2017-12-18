@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Restaurant menu for logged out users</title>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <script src="/static/bootstrap-3.3.7-dist/js/jquery-3.2.1.min.js"></script>
+    <link rel="stylesheet" type="text/css" href="/static/bootstrap-3.3.7-dist/css/bootstrap.min.css">
+    <link rel="stylesheet" type="text/css" href="/static/bootstrap-3.3.7-dist/css/custom.css">
+    <link rel="stylesheet" type="text/css" href="/static/css/styles.css">
+    <link href="https://fonts.googleapis.com/css?family=Calligraffitti" rel="stylesheet">
+    <script src="/static/bootstrap-3.3.7-dist/js/bootstrap.min.js"></script>
+</head>  
+<body>
+    <div class="container">
+        <div class="col-md-12" style="text-align:right;">
+                {% if not session['username'] %} 
+                <a style='margin: 10px 0 10px 0' href='/login' role ='button' class ='btn btn-default'>Login</a>
+                {% else %}
+                <span style="font-size:20px; color: white;">Welcome, {{ session['username'].split(' ')[0] }} &nbsp; </span><a style='margin: 10px 0 16px 0' href='/disconnect' role ='button' class ='btn btn-default'>Logout</a>
+                {% endif %}
+            </div>
+        <div class="col-md-12" align="center" style="background-image: url('/static/bootstrap-3.3.7-dist/images/Vintage Slate Blackboard-300dpi.png')">
+            <h1 style="width:100%; color:white; padding:20px 0 0px 20px;">Here is the menu of {{name_resto}}</h1>        
+            <div id="menu-content">    
+            {% for x in menu %}
+                <p>
+                <span class="menu">Course: {{x.course}}</span><br>
+                <span class="menu">Menu item: {{x.name}}</span><br>
+                <span class="menu">Description: {{x.description}}</span><br>
+                <span class="menu">Price: {{x.price}}</span><br>
+                </p>    
+                {% endfor %}
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-md-12" id="bottom" style="padding-top:20px; text-align:right;"> 
+                <a role="button" class="btn btn-warning btn-block btn-lg" href="{{url_for('showallrestaurants')}}">See the menu of other restaurants</a>
+                <!--<a role="button" class="btn btn-warning btn-block btn-lg" href='{{url_for('addNewMenuItem', resto_id=resto_identif)}}'>Add a new menu item to the menu of {{name_resto}} </a>-->
+            </div>
+        </div>
+    </div>
+</body>    
+</html>

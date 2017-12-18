@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html>
+<head>
+        <title>Edit restaurant</title>
+        <meta charset="utf-8">
+        <meta http-equiv="X-UA-Compatible" content="IE=edge">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+        <script src="/static/bootstrap-3.3.7-dist/js/jquery-3.2.1.min.js"></script>
+        <link rel="stylesheet" type="text/css" href="/static/bootstrap-3.3.7-dist/css/bootstrap.min.css">
+        <link rel="stylesheet" type="text/css" href="/static/bootstrap-3.3.7-dist/css/custom.css">
+        <link href="https://fonts.googleapis.com/css?family=Calligraffitti" rel="stylesheet">
+        <link rel="stylesheet" type="text/css" href="/static/css/styles.css">
+        <script src="/static/bootstrap-3.3.7-dist/js/bootstrap.min.js"></script>
+        <script>
+                $(document).on('change', ':file', function() {
+                var input = $(this),
+                label = input.val().replace(/\\/g, '/').replace(/.*\//, '');
+                $("#inputImage_url").attr("placeholder", label);
+                });
+            </script>
+</head>  
+<body>
+    <div class="container">
+        <h3>Please enter the new name and the description for {{name_resto}} in the fields below:</h3><br>
+        <form enctype=multipart/form-data action="{{url_for('editResto', resto_id=resto_identif)}}" method ='POST'>
+            <div class="form-group">
+                <label for="inputName">New name:</label>
+                <input class="form-control" type = 'text' size = '60' name = 'name' id="inputName" placeholder='{{name_resto}}'>
+            </div>
+            <div class="form-group">
+                <label for="inputDescription">New description:</label>
+                <input class="form-control" type = 'text' size = '60' name = 'description' id="inputDescription" placeholder='{{resto_desc}}'>
+            </div>
+            <div class="form-group">
+                <label for = "fileInput">Upload image
+                <span class="input-group" style="margin-top:5px;">
+                    <span class="input-group-btn">
+                        <span class= "btn btn-warning btn-file btn-md">
+                            Browse...<input id="fileInput" type="file" style="display:none;" name="file">
+                        </span>
+                    </span>
+                    <input id='inputImage_url' type="text"class="form-control">
+                </span>
+                </label>
+            </div>
+            <button class="btn btn-warning btn-block btn-lg" type = 'submit' value = 'Edit'>Edit</button>
+        </form>
+        <br>
+    <a role="button" class="btn btn-warning btn-block btn-lg" href="{{url_for('showallrestaurants')}}">Come back to the list of all restaurants</a>
+    </div>
+</body>    
+</html>

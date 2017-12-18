@@ -1,0 +1,77 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>List of restaurants for logged in users</title>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <script src="/static/bootstrap-3.3.7-dist/js/jquery-3.2.1.min.js"></script>
+    <link rel="stylesheet" type="text/css" href="/static/bootstrap-3.3.7-dist/css/bootstrap.min.css">
+    <link rel="stylesheet" type="text/css" href="/static/bootstrap-3.3.7-dist/css/custom.css">
+    <link rel="stylesheet" type="text/css" href="/static/css/styles.css">
+    <script src="/static/bootstrap-3.3.7-dist/js/bootstrap.min.js"></script>
+    <script src="/static/bootstrap-3.3.7-dist/js/jquery.masonry.min.js"></script>
+    <script src="/static/bootstrap-3.3.7-dist/js/imagesloaded.pkgd.min.js"></script> 
+    <script type="text/javascript">
+        $(window).on('load', function(){
+            var $container = $('#grid').imagesLoaded(function(){
+                var $item = $container.find('.item');
+                var itemHeight = $item.outerHeight();
+                var itemWidth = $item.outerWidth();
+                    $container.masonry({
+                    gutter: '.gutter-sizer'
+                    });
+                    $item.css({
+                    width: itemWidth,
+                    });
+            });
+        });
+        </script> 
+
+</head>  
+<body>
+    <div class="container">
+        {% with messages = get_flashed_messages() %}
+        {% if messages %}
+        <div class="col-md-12" align="left" style="margin-top:20px;">
+            {% for message in messages %}
+            <span style="font-size:20px; color: white;"><strong>{{message}} </strong></span>
+        </div>
+        {% endfor %}
+        {% endif %}
+        {% endwith %}
+        <div class="col-md-12" align="right" >
+            {% if not session['username'] %} 
+            <a style='margin: 10px 0 10px 0' href='/login' role ='button' class ='btn btn-default'>Login</a>
+            {% else %}
+            <span style="font-size:20px; color: white;">Welcome, {{ session['username'].split(' ')[0] }} &nbsp; </span><a style='margin: 10px 0 16px 0' href='/disconnect' role ='button' class ='btn btn-default'>Logout</a>
+            {% endif %}
+        </div>
+        <div class="col-md-12" align="center">
+            <h1  id ="home" style="padding: 50px 10px 0 10px; width:95%; position:absolute; z-index:2; color:white;">Foodie App always ready to provide you with the latest menus in the nearest restaurants</h1>
+            <img id="bg_image" alt="background" class="img-responsive" src="/static/bootstrap-3.3.7-dist/images/cook-food-kitchen-eat-54455_2.jpg">
+        </div>
+        <div class='row'>
+            <div class="col-md-12" align="center" id='grid'>
+                {% for resto in restos %}
+                <div class="col-sm-12 col-md-6 col-lg-4 item">
+                    <div class="panel panel-default">
+                        <div class="panel-heading"><a style="font-size:20px; color:#f0ad4e;" class="btn btn-link" href="{{url_for('restoMenu', resto_ID=resto.id)}}">{{resto.name}}</a></div>
+                        <div class="panel-body"><img class = "img-responsive center-block" src="{{resto.image}}"/></div>
+                        <div class="panel-footer">{{resto.description}}</div>
+                    </div>
+                    {% if resto.user_id == user.id %}
+                    <a class="btn btn-default" role="button" href="{{url_for('editResto', resto_id=resto.id)}}" style="margin-bottom:30px;">Edit</a> <a class="btn btn-default" role="button" style="margin-bottom:30px;" href="{{url_for('deleteResto',resto_id=resto.id)}}">Delete</a>
+                    {% endif %}
+                </div>
+                {% endfor %}
+            </div>
+        </div>    
+        <div class="row">            
+            <div class="col-md-12" align="center" id="bottom">
+                <a href="{{url_for('createNewResto')}}" role ="button" class ="btn btn-warning btn-block btn-lg">Add a new restaurant</a>
+            </div>
+        </div>    
+    </div>
+</body>   
+</html>

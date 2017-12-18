@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Edit menu item</title>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <script src="/static/bootstrap-3.3.7-dist/js/jquery-3.2.1.min.js"></script>
+    <link rel="stylesheet" type="text/css" href="/static/bootstrap-3.3.7-dist/css/bootstrap.min.css">
+    <link rel="stylesheet" type="text/css" href="/static/bootstrap-3.3.7-dist/css/custom.css">
+    <link href="https://fonts.googleapis.com/css?family=Calligraffitti" rel="stylesheet">
+    <link rel="stylesheet" type="text/css" href="/static/css/styles.css">
+    <script src="/static/bootstrap-3.3.7-dist/js/bootstrap.min.js"></script>
+    </head>
+<body>
+    <div class="container">
+        <h3>Please enter the new values for {{item_name}} in the fields below:</h3>
+            <form action="{{url_for('editMenuItems', resto_id=resto, item_id=item)}}" method ='POST'>
+                <div class="form-group">
+                    <label for="inputName">Name:</label>
+                    <input id="inputName" class="form-control" type = 'text' name = 'name' placeholder='{{item_name}}'>
+                </div>
+                <div class="form-group">
+                    <label for="inputCourse">Course:</label>
+                    <input id="inputCourse" class="form-control" type = 'text' name = 'course' placeholder='{{course}}'>
+                </div>
+                <div class="form-group">
+                    <label for="inputDescription">Description:</label>
+                    <input id="inputDescription" class="form-control" type="text" name="description" placeholder='{{item_description}}'>
+                </div>
+                <div class="form-group">
+                    <label for="inputPrice">Price:</label>
+                    <input id="inputPrice" name="price" class="form-control" type="text" placeholder='{{price}}'>
+                </div>
+                    <button class="btn btn-warning btn-block btn-lg" type = 'submit' value = 'Submit'>Submit</button>
+            </form>
+            <br>
+            <a role="button" class= "btn btn-warning btn-block btn-lg" href="{{url_for('restoMenu', resto_ID=resto)}}">Cancel and return to the menu of the restaurant</a>
+    </div>
+</body>    
+</html>

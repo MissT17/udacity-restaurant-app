@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Add menu item</title>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <script src="/static/bootstrap-3.3.7-dist/js/jquery-3.2.1.min.js"></script>
+    <link rel="stylesheet" type="text/css" href="/static/bootstrap-3.3.7-dist/css/bootstrap.min.css">
+    <link rel="stylesheet" type="text/css" href="/static/bootstrap-3.3.7-dist/css/custom.css">
+    <link rel="stylesheet" type="text/css" href="/static/css/styles.css">
+    <script src="/static/bootstrap-3.3.7-dist/js/bootstrap.min.js"></script>
+</head>  
+<body>
+    <div class="container">
+        <h3>Please fill out the form below to add a new menu item to the {{resto_name}}:</h3>   
+        <form  action="{{url_for('addNewMenuItem', resto_id=resto)}}" method='POST'>
+            <div class="form-group">
+                <label for="inputName">Name:</label>
+                <input type='text' name='name' id="inputName" class="form-control">
+            </div>
+            <div class="form-group">
+                <label for="inputCourse">Course:</label>
+                <input class="form-control" type='text' name='course' id="inputCourse">
+            </div>
+            <div class="form-group">
+                <label for="inputDescription">Description:</label>
+                <input type='text' class="form-control" id="inputDescription" name='description'>
+            </div>
+            <div class="form-group">
+                <label for="inputPrice">Price:</label>
+                <input type='number' step="any"  id="inputPrice" class="form-control" name='price'>
+            </div>   
+                <button class="btn btn-warning btn-block btn-lg" type='submit' value='Add'>Save</button>    
+        </form>
+        <br>
+        <a role="button" class="btn btn-warning btn-block btn-lg" href="{{url_for('showallrestaurants')}}">Cancel and return to the main page</a>
+    </div>    
+</body>    
+</html>    

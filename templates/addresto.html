@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Add a new restaurant</title>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <script src="/static/bootstrap-3.3.7-dist/js/jquery-3.2.1.min.js"></script>
+    <link rel="stylesheet" type="text/css" href="/static/bootstrap-3.3.7-dist/css/bootstrap.min.css">
+    <link rel="stylesheet" type="text/css" href="/static/bootstrap-3.3.7-dist/css/custom.css">
+    <link href="https://fonts.googleapis.com/css?family=Calligraffitti" rel="stylesheet">
+    <link rel="stylesheet" type="text/css" href="/static/css/styles.css">
+    <script src="/static/bootstrap-3.3.7-dist/js/bootstrap.min.js"></script>
+    <script>
+        $(document).on('change', ':file', function() {
+        var input = $(this),
+        label = input.val().replace(/\\/g, '/').replace(/.*\//, '');
+        $("#inputImage_url").attr("placeholder", label);
+        });
+    </script>
+</head>      
+<body>
+    <div class="container">
+        <h3>Please fill out the form below to add a new restaurant to the list of restaurants:</h3><br>
+        <form enctype=multipart/form-data action="{{url_for('createNewResto')}}" method='POST'>
+            <div class="form-group">
+                <label for="inputName">Name:</label>
+                <input type='text' class="form-control" id="inputName" name='name' placeholder="Name">    
+            </div>
+            <div class="form-group">
+                <label for="inputDescription">Description:</label>
+                <input type="text" class="form-control" id="inputDescription" name='description' placeholder="Please add the description of the restaurant  here">
+            </div>
+            <div class="form-group">
+                <label for = "fileInput">Upload image
+                <span class="input-group" style="margin-top:5px;">
+                    <span class="input-group-btn">
+                        <span class= "btn btn-warning btn-file btn-md">
+                            Browse...<input id="fileInput" type="file" style="display:none;" name="file">
+                        </span>
+                    </span>
+                    <input id='inputImage_url' type="text"class="form-control">
+                </span>
+                </label>
+            </div>
+            <br>
+            <button type='submit' class="btn btn-warning btn-block btn-lg" value='Add'>Submit</button>    
+        </form>
+        <br>
+        <a role="button" class="btn btn-warning btn-block btn-lg" href="{{url_for('showallrestaurants')}}">Come back to the list of all restaurants</a>
+    </div>
+</body>        
+</html>

@@ -1,0 +1,9 @@
+# ignore the following files
+
+*.pyc
+client_secret_new.json
+fb_client_secrets.json
+dump.rdb
+.vscode/
+.vagrant/
+*.DS_Store
