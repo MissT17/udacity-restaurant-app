@@ -1,5 +1,5 @@
 # Restaurant Project Description
-This webapp is designed to display a list of restaurants with their respective menus and menu items available at the moment. The app allows the users to add, edit and delete restaurants as they wish. 
+This webapp is designed to display a list of restaurants with their respective menus and menu items available at the moment. The app allows the users to add, edit and delete restaurants as they wish.  
 
 ## Directory Structure
 In the GitHub …… repository you will find the following files:
