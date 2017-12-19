@@ -2,7 +2,7 @@
 This webapp is designed to display a list of restaurants with their respective menus and menu items available at the moment. The app allows the users to add, edit and delete restaurants as they wish.  
 
 ## Directory Structure
-In the GitHub …… repository you will find the following files:
+In the [GitHub repository](https://github.com/MissT17/udacity-restaurant-app) you will find the following files:
 1. *finalproject.py* – contains all the logic of the app in terms of user authorization and content
 2. *login.py* - contains the logic in relation to the user authentication via Google or Facebook APIs
 3. *static* folder – contains all the files necessary for the styling of the application, including bootstrap library, jquery, javascript and custom css.
