@@ -88,6 +88,7 @@ def editResto(resto_id):
     restaurant = session.query(Restaurant).filter_by(id=resto_id).one()
     name_resto = restaurant.name
     description_resto = restaurant.description
+    image_resto = restaurant.image[15:]
     if request.method == 'POST':
         if request.form['name']:
             restaurant.name = request.form['name']
@@ -105,7 +106,8 @@ def editResto(resto_id):
             'editresto.html',
             resto_identif=resto_id,
             name_resto=name_resto,
-            resto_desc=description_resto
+            resto_desc=description_resto,
+            resto_image=image_resto
         )
 
 
@@ -277,4 +279,4 @@ if __name__ == '__main__':
     app.secret_key = 'super_secret_key'
     app.debug = True
     app.run(host='0.0.0.0', port=5000)
-    
+
