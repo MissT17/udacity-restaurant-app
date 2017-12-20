@@ -260,3 +260,4 @@ def fbdisconnect():
     h = httplib2.Http()
     result = h.request(url, 'DELETE')[1]
     return "You have been logged out"
+
