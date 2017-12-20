@@ -1,10 +1,12 @@
-from flask import Flask, render_template, request, redirect, url_for, jsonify, flash
+from flask import Flask, render_template
+from flask import request, redirect, url_for, jsonify, flash
 from json_format import serialize, serialize_resto, serialize_item
 from sqlalchemy import create_engine
 from database_setup_fn import Base, Restaurant, MenuItem, User
 from sqlalchemy.orm import sessionmaker
 from flask import session as login_session
-import random, string
+import random
+import string
 from oauth2client.client import flow_from_clientsecrets
 from oauth2client.client import FlowExchangeError
 import httplib2
@@ -17,11 +19,14 @@ from werkzeug.utils import secure_filename
 from PIL import Image
 
 app = Flask(__name__)
-app.register_blueprint(login) #  create Blueprint to split the login (routes) of the app into 2 files(login.py contains logic for authrntication process, finalproject.py contains the authorization and content logic)
+# create Blueprint to split the login (routes) of the app into 2
+# files(login.py contains logic for authrntication process, finalproject.py
+# contains the authorization and content logic)
+app.register_blueprint(login)
 engine = create_engine('sqlite:///restaurantmenu_fn_users.db')
 Base.metadata.bind = engine
 
-UPLOAD_FOLDER ='./static/images'
+UPLOAD_FOLDER = './static/images'
 app.config['UPLOAD_FOLDER'] = UPLOAD_FOLDER
 
 
@@ -32,6 +37,7 @@ session = DBSession()
 #  in the database. One view is available for logged in and the other
 #  for logged out users.
 
+
 @app.route('/')
 @app.route('/restos/')
 def showallrestaurants():
@@ -39,11 +45,13 @@ def showallrestaurants():
     if 'username' not in login_session:
         return render_template('public_allrestos.html', restos=restaurants)
     else:
-        user = session.query(User).filter_by(name=login_session['username']).one()
+        user = session.query(User).\
+            filter_by(name=login_session['username']).one()
         return render_template('allrestos.html', restos=restaurants, user=user)
 
 
-# routes that allow to execute various actions with restaurants (add, edit or delete them)
+# routes that allow to execute various actions with
+# restaurants (add, edit or delete them)
 
 @app.route('/restos/new', methods=['GET', 'POST'])
 def createNewResto():
@@ -59,9 +67,15 @@ def createNewResto():
         img_url_resize = filename[:-4] + '_thumb.jpg'
         new_image.save(os.path.join(UPLOAD_FOLDER, img_url_resize))
         resized_url = '/static/images/' + img_url_resize
-        user = session.query(User).filter_by(name=login_session['username']).one()
-        new_resto = Restaurant(image= resized_url, name=request.form['name'], description=request.form['description'], user_id=user.id)
-        #print new_resto.image
+        user = session.query(User). \
+            filter_by(name=login_session['username']).one()
+        new_resto = Restaurant(
+            image=resized_url,
+            name=request.form['name'],
+            description=request.form['description'],
+            user_id=user.id
+        )
+        # print new_resto.image
         session.add(new_resto)
         session.commit()
         flash("The restaurant has been added to the list fof restaurants.")
@@ -81,13 +95,18 @@ def editResto(resto_id):
             file_img = request.files['file']
             filename = secure_filename(file_img.filename)
             file_img.save(os.path.join(app.config['UPLOAD_FOLDER'], filename))
-            img_url ='/static/images/'+ filename
+            img_url = '/static/images/' + filename
             restaurant.image = img_url
             session.add(restaurant)
             session.commit()
             return redirect(url_for('showallrestaurants'))
     else:
-        return render_template('editresto.html', resto_identif=resto_id, name_resto=name_resto, resto_desc=description_resto)
+        return render_template(
+            'editresto.html',
+            resto_identif=resto_id,
+            name_resto=name_resto,
+            resto_desc=description_resto
+        )
 
 
 @app.route('/restos/<int:resto_id>/delete', methods=['GET', 'POST'])
@@ -105,10 +124,15 @@ def deleteResto(resto_id):
         session.commit()
         flash("The restaurant %s has been deleted" % resto_name)
         return redirect(url_for('showallrestaurants'))
-    return render_template('deleteresto.html', resto=resto_id, resto_name=resto_to_delete.name)
+    return render_template(
+        'deleteresto.html',
+        resto=resto_id,
+        resto_name=resto_to_delete.name
+    )
 
 
-# routes that display the list of menu items in a restaurant. Two views are available:
+# routes that display the list of menu items in a restaurant.
+# Two views are available:
 # one for logged in (with possibility to edit & delete items) and the other
 # for logged out users (only able to consult the content)
 
@@ -119,19 +143,39 @@ def restoMenu(resto_ID):
     menu = session.query(MenuItem).filter_by(restaurant_id=resto_ID).all()
     name_resto = resto.name
     user = session.query(User).filter_by(name=login_session['username']).one()
-    if not 'username' in login_session:
-        return render_template('public_resto_menu.html', resto_identif=resto_ID, menu=menu, name_resto=name_resto)
+    if 'username' not in login_session:
+        return render_template(
+            'public_resto_menu.html',
+            resto_identif=resto_ID,
+            menu=menu,
+            name_resto=name_resto
+        )
     elif resto.user_id != user.id:
-            return render_template('public_resto_menu.html', resto_identif=resto_ID, menu=menu, name_resto=name_resto)
+            return render_template(
+                'public_resto_menu.html',
+                resto_identif=resto_ID,
+                menu=menu,
+                name_resto=name_resto
+            )
     else:
         if menu == []:
             return redirect(url_for('addNewMenuItem', resto_id=resto_ID))
-        return render_template('resto_menu.html', resto_identif=resto_ID, menu=menu, name_resto=name_resto, creator=resto.user_id)
+        return render_template(
+            'resto_menu.html',
+            resto_identif=resto_ID,
+            menu=menu,
+            name_resto=name_resto,
+            creator=resto.user_id
+        )
 
 
-# routes that allow to execute various actions with menu items (add, edit or delete them)
+# routes that allow to execute various
+# actions with menu items (add, edit or delete them)
 
-@app.route('/restos/<int:resto_id>/menu/<int:item_id>/edit', methods=['GET', 'POST'])
+@app.route(
+    '/restos/<int:resto_id>/menu/<int:item_id>/edit',
+    methods=['GET', 'POST']
+    )
 def editMenuItems(resto_id, item_id):
     item = session.query(MenuItem).filter_by(id=item_id).one()
     item_name = item.name
@@ -145,7 +189,15 @@ def editMenuItems(resto_id, item_id):
             session.commit()
             return redirect(url_for('restoMenu', resto_ID=resto_id))
     else:
-        return render_template('edit_menu_item.html', price=item.price, course=item.course, resto=resto_id, item=item_id, item_name=item_name, item_description=item.description)
+        return render_template(
+            'edit_menu_item.html',
+            price=item.price,
+            course=item.course,
+            resto=resto_id,
+            item=item_id,
+            item_name=item_name,
+            item_description=item.description
+        )
 
 
 @app.route('/restos/<int:resto_id>/menu/new', methods=['GET', 'POST'])
@@ -153,14 +205,28 @@ def addNewMenuItem(resto_id):
     resto = session.query(Restaurant).filter_by(id=resto_id).one()
     resto_name = resto.name
     if request.method == 'POST':
-        added_item = MenuItem(name=request.form['name'], description=request.form['description'], price=request.form['price'], course=request.form['course'], restaurant_id=resto_id, user_id=resto.user_id)
+        added_item = MenuItem(
+            name=request.form['name'],
+            description=request.form['description'],
+            price=request.form['price'],
+            course=request.form['course'],
+            restaurant_id=resto_id,
+            user_id=resto.user_id
+        )
         session.add(added_item)
         session.commit()
         return redirect(url_for('restoMenu', resto_ID=resto_id))
-    return render_template('add_menu_item.html', resto=resto_id, resto_name=resto_name)
+    return render_template(
+        'add_menu_item.html',
+        resto=resto_id,
+        resto_name=resto_name
+    )
 
 
-@app.route('/restos/<int:resto_id>/menu/<int:item_id>/delete', methods=['GET', 'POST'])
+@app.route(
+    '/restos/<int:resto_id>/menu/<int:item_id>/delete',
+    methods=['GET', 'POST']
+)
 def deleteMenuItem(resto_id, item_id):
     res = session.query(Restaurant).filter_by(id=resto_id).one()
     resto_name = res.name
@@ -170,10 +236,17 @@ def deleteMenuItem(resto_id, item_id):
         session.delete(item_to_delete)
         session.commit()
         return redirect(url_for('restoMenu', resto_ID=resto_id))
-    return render_template('delete_menu_item.html', resto=resto_id, item=item_id, item_name=item_name, resto_name=resto_name)
+    return render_template(
+        'delete_menu_item.html',
+        resto=resto_id,
+        item=item_id,
+        item_name=item_name,
+        resto_name=resto_name
+    )
 
 
-# following routes provide access to different types of information in JSON format(list of restaurants,
+# following routes provide access to different types
+# of information in JSON format(list of restaurants,
 # menu items in a restaurant or a menu item)
 
 @app.route('/restos/<int:resto_ID>/menu/JSON')
@@ -188,7 +261,9 @@ def restoMenuJSON(resto_ID):
 @app.route('/restos/JSON')
 def listrestoJSON():
     restaurants = session.query(Restaurant).all()
-    return jsonify(Restaurants=[restaurant.serialize for restaurant in restaurants])
+    return jsonify(
+        Restaurants=[restaurant.serialize for restaurant in restaurants]
+    )
 
 
 @app.route('/restos/<int:resto_id>/menu/<int:item_id>/JSON')

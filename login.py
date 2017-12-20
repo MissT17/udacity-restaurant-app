@@ -1,7 +1,9 @@
 from flask import Blueprint
 from flask import session as login_session
-import random, string
-from flask import Flask, render_template, request, redirect, url_for, jsonify, flash
+import random
+import string
+from flask import Flask, render_template
+from flask import request, redirect, url_for, jsonify, flash
 from oauth2client.client import flow_from_clientsecrets
 from oauth2client.client import FlowExchangeError
 import httplib2
@@ -19,12 +21,17 @@ Base.metadata.bind = engine
 DBSession = sessionmaker(bind=engine)
 session = DBSession()
 
-CLIENT_ID = json.loads(open('client_secret_new.json', 'r').read())['web']['client_id']
+CLIENT_ID = json.loads(open(
+    'client_secret_new.json', 'r').read())['web']['client_id']
 APPLICATION_NAME = "Restaurant project udacity"
 
 
 def createUser(login_session):
-    newUser = User(name=login_session['username'], email=login_session['email'], picture=login_session['picture'])
+    newUser = User(
+        name=login_session['username'],
+        email=login_session['email'],
+        picture=login_session['picture']
+    )
     session.add(newUser)
     session.commit()
     user = session.query(User).filter_by(email=login_session['email']).one()
@@ -42,7 +49,8 @@ def getUserInfo(user_id):
 
 def getUserID(email):
     try:
-        user = session.query(User).filter_by(email=login_session['email']).one()
+        user = session.query(User).\
+            filter_by(email=login_session['email']).one()
         return user.id
     except:
         return None
@@ -50,28 +58,40 @@ def getUserID(email):
 
 @login.route('/login')
 def showLogin():
-    state = ' '.join(random.choice(string.ascii_uppercase + string.digits) for x in xrange(32))  # create a state variable
+    # create a state variable
+    state = ' '.join(random.choice(
+        string.ascii_uppercase + string.digits) for x in xrange(32))
     login_session['state'] = state
     return render_template('login.html', STATE=state)
 
 
 @login.route('/gconnect', methods=['POST'])
 def gconnect():
-    if request.args.get('state') != login_session['state']:  # verify if the connection between the server and the client is not compromized
+    # verify if the connection between the server and
+    # the client is not compromized
+    if request.args.get('state') != login_session['state']:
         response = make_response(json.dumps('Invalid state'), 401)
         response.headers['Content-Type'] = 'application/json'
         return response
     code = request.data  # retrieve the one-time code from Google
     try:
-        oauth_flow = flow_from_clientsecrets('client_secret_new.json', scope='')  # create a FLOW object required by Google to exchange a one-time code to access_token
+        # create a FLOW object required by Google to exchange
+        # a one-time code to access_token
+        oauth_flow = flow_from_clientsecrets(
+            'client_secret_new.json',
+            scope=''
+        )
         oauth_flow.redirect_uri = 'postmessage'
         credentials = oauth_flow.step2_exchange(code)
     except FlowExchangeError:
-        response = make_response(json.dumps('Failed to upgrade the authorization code'), 401)
+        response = make_response(
+            json.dumps('Failed to upgrade the authorization code'),
+            401)
         response.headers['Content-Type'] = 'application/json'
         return response
-    access_token = credentials.access_token  # retrieve an access_token to enable the requests from server to Google
-    url = ('https://www.googleapis.com/oauth2/v1/tokeninfo?access_token=%s' %access_token)
+    # retrieve an access_token to enable the requests from server to Google
+    access_token = credentials.access_token
+    url = ('https://www.googleapis.com/oauth2/v1/tokeninfo?access_token=%s' %access_token)  # NOQA
     h = httplib2.Http()
     result = json.loads(h.request(url, 'GET')[1])
     if result.get('error') is not None:
@@ -80,20 +100,30 @@ def gconnect():
         return response
     gplus_id = credentials.id_token['sub']
     if result['user_id'] != gplus_id:
-        response = make_response(json.dumps("Token's user ID doesn't match given user ID"), 401)
+        response = make_response(
+            json.dumps("Token's user ID doesn't match given user ID"),
+            401)
         response.headers['Content-Type'] = 'application/json'
         return response
     if result['issued_to'] != CLIENT_ID:
-        response = make_response(json.dumps("Token's client ID does not match app's"), 401)
+        response = make_response(
+            json.dumps("Token's client ID does not match app's"),
+            401)
         response.headers['Content-Type'] = 'application/json'
         return response
-    stored_access_token = login_session.get('access_token')  # store the access token, if it already exists as variable
-    stored_gplus_id = login_session.get('gplus_id')  # store the user, if he already exists as variable
+    # store the access token, if it already exists as variable
+    stored_access_token = login_session.get('access_token')
+    # store the user, if he already exists as variable
+    stored_gplus_id = login_session.get('gplus_id')
     if stored_access_token is not None and gplus_id == stored_gplus_id:
-        response = make_response(json.dumps('Current user is already connected'), 200)
+        response = make_response(
+            json.dumps('Current user is already connected'),
+            200)
         response.headers['Content-Type'] = 'application/json'
         return response
-    login_session['provider'] = 'google'  # create a login session with all the infrmation related to the session and user
+    # create a login session with all the information
+    # related to the session and user
+    login_session['provider'] = 'google'
     login_session['access_token'] = credentials.access_token
     login_session['gplus_id'] = gplus_id
     userinfo_url = "https://www.googleapis.com/oauth2/v1/userinfo"
@@ -114,26 +144,33 @@ def gconnect():
     output += '!</h1>'
     output += '<img src='' '
     output += login_session['picture']
-    output += ' " style="width:300px; height:300px; border-radius:150px; -webkit-border-radius:150px; -moz-border-radius:150px;">'
+    output += ' " style="width: 300px; height: 300px; border-radius: 150px; -webkit-border-radius: 150px; -moz-border-radius: 150px;">'  # NOQA
     flash("You are now logged in as %s" % login_session['username'])
     return output
 
 
 @login.route('/fbconnect', methods=['POST'])
 def fbconnect():
-    if request.args.get('state') != login_session['state']:  # verify if the connection between the server and the client is not compromized
+    # verify if the connection between the server and
+    # the client is not compromized
+    if request.args.get('state') != login_session['state']:
         response = make_response(json.dump('Invalid state parameter.'), 401)
         response.headers['Content-type'] = 'application/json'
         return response
-    access_token = request.data  # retrieve one-time code foe connection with Facebook
-    app_id = json.loads(open('fb_client_secrets.json', 'r').read())['web']['app_id']
-    app_secret = json.loads(open('fb_client_secrets.json', 'r').read())['web']['app_secret']
-    url = 'https://graph.facebook.com/v2.8/oauth/access_token?grant_type=fb_exchange_token&client_id=%s&client_secret=%s&fb_exchange_token=%s' % (app_id, app_secret, access_token)
+    # retrieve one-time code for connection with Facebook
+    access_token = request.data
+    app_id = json.loads(open(
+        'fb_client_secrets.json', 'r').read())['web']['app_id']
+    app_secret = json.loads(open(
+        'fb_client_secrets.json', 'r').read())['web']['app_secret']
+    url = 'https://graph.facebook.com/v2.8/oauth/access_token?grant_type=fb_exchange_token&client_id=%s&client_secret=%s&fb_exchange_token=%s' % (app_id, app_secret, access_token)  # NOQA
     h = httplib2.Http()
     result = h.request(url, 'GET')[1]
-    #userinfo_url = "https://graph.facebook.com/v2.8/me"
-    token = result.split(',')[0].split(':')[1].replace('"', '')  # retrieve access_token for communication between server and Google directly
-    url = 'https://graph.facebook.com/v2.8/me?access_token=%s&fields=name,id,email' % token
+    # userinfo_url = "https://graph.facebook.com/v2.8/me"
+    # retrieve access_token for communication between
+    # server and Facebook directly
+    token = result.split(',')[0].split(':')[1].replace('"', '')
+    url = 'https://graph.facebook.com/v2.8/me?access_token=%s&fields=name,id,email' % token  # NOQA
     h = httplib2.Http()
     result = h.request(url, 'GET')[1]
     data = json.loads(result)
@@ -142,7 +179,7 @@ def fbconnect():
     login_session['email'] = data["email"]
     login_session['facebook_id'] = data["id"]
     login_session['access_token'] = token
-    url = 'https://graph.facebook.com/v2.8/me/picture?access_token=%s&redirect=0&height=200&width=200' % token
+    url = 'https://graph.facebook.com/v2.8/me/picture?access_token=%s&redirect=0&height=200&width=200' % token  # NOQA
     h = httplib2.Http()
     result = h.request(url, 'GET')[1]
     data = json.loads(result)
@@ -158,12 +195,13 @@ def fbconnect():
     output += '!</h1>'
     output += '<img src='' '
     output += login_session['picture']
-    output += ' " style="width:300px; height:300px; border-radius:150px; -webkit-border-radius:150px; -moz-border-radius:150px;">'
+    output += ' " style="width:300px; height:300px; border-radius:150px; -webkit-border-radius:150px; -moz-border-radius:150px;">'  # NOQA
     flash("you are now logged in as %s" % login_session['username'])
     return output
 
 
-@login.route('/disconnect')  # code that is executed whenever the user disconnects(Google or Facebook) 
+# code that is executed whenever the user disconnects(Google or Facebook)
+@login.route('/disconnect')
 def disconnect():
     if 'provider' in login_session:
         if login_session['provider'] == 'google':
@@ -177,7 +215,9 @@ def disconnect():
         del login_session['picture']
         del login_session['provider']
         del login_session['access_token']
-        flash("You have been successfully logged out, navigate the website and login to modify its content")
+        flash(
+            "You have been successfully logged out,"
+            " navigate the website and login to modify its content")
         return redirect(url_for('showallrestaurants'))
     else:
         flash("You were not logged in to begin with")
@@ -188,19 +228,26 @@ def disconnect():
 def gdisconnect():
     access_token = login_session.get('access_token')
     if access_token is None:
-        response = make_response(json.dumps('Current user is not connected'), 401)
+        response = make_response(
+            json.dumps('Current user is not connected'),
+            401
+        )
         response.headers['Content-Type'] = 'application/json'
         return response
-    url = 'https://accounts.google.com/o/oauth2/revoke?token=%s' % login_session['access_token']
+    url = 'https://accounts.google.com/o/oauth2/revoke?token=%s' % login_session['access_token']  # NOQA
     h = httplib2.Http()
     result = h.request(url, 'GET')[0]
     if result['status'] == '200':
         response = make_response(json.dumps('Successfully disconnected.'), 200)
         response.headers['Content_Type'] = 'application/json'
-        # flash("You have been successfully logged out, navigate the website and login to modify its content")
+        # flash("You have been successfully logged out,
+        # navigate the website and login to modify its content")
         return redirect('/restos')
     else:
-        response = make_response(json.dumps('Failed to revoke for given user'), 400)
+        response = make_response(
+            json.dumps('Failed to revoke for given user'),
+            400
+        )
         response.headers['Content-Type'] = 'application/json'
         return response
 
@@ -209,7 +256,7 @@ def gdisconnect():
 def fbdisconnect():
     facebook_id = login_session['facebook_id']
     access_token = login_session['access_token']
-    url = 'https://graph.facebook.com/%s/permissions?access_token=%s' % (facebook_id, access_token)
+    url = 'https://graph.facebook.com/%s/permissions?access_token=%s' % (facebook_id, access_token)  # NOQA
     h = httplib2.Http()
     result = h.request(url, 'DELETE')[1]
     return "You have been logged out"

@@ -7,3 +7,4 @@ dump.rdb
 .vscode/
 .vagrant/
 *.DS_Store
+Vagrantfile

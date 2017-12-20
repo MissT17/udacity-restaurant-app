@@ -57,7 +57,7 @@
                 <div class="col-sm-12 col-md-6 col-lg-4 item">
                     <div class="panel panel-default">
                         <div class="panel-heading"><a style="font-size:20px; color:#f0ad4e;" class="btn btn-link" href="{{url_for('restoMenu', resto_ID=resto.id)}}">{{resto.name}}</a></div>
-                        <div class="panel-body"><img class = "img-responsive center-block" src="{{resto.image}}"/></div>
+                        <div class="panel-body"><img alt='resto image' class = "img-responsive center-block" src="{{resto.image}}"/></div>
                         <div class="panel-footer">{{resto.description}}</div>
                     </div>
                     {% if resto.user_id == user.id %}
