@@ -19,6 +19,7 @@ In this GitHub repository you will find the following files:
     - Google account [here](https://developers.google.com/identity/sign-in/web/devconsole-project) (enable a Google+ API and indicate `http://localhost:5000/login`as 'Authorised JavaScript origins' and
 `http://localhost:5000/gconnect` as 'Authorised redirect URIs') > download JSON and save as *client_secret_new.json* file
     - Facebook [here](https://developers.facebook.com/docs/pages/getting-started/) > open your app's dashboard and save the app ID as well as the app secret in *fb_client_secrets.json*
+- you also need to install `requests` and `Pillow` in the vagrant environment by running `pip install requests` and `pip install Pillow`.
 
 ## Installation
 1. Clone the Github repository
@@ -27,8 +28,8 @@ In this GitHub repository you will find the following files:
     ```
 2. Move *fb_client_secrets.json* and *client_secret_new.json* into the cloned repository
 3. Open */templates/login.html* > line 49, insert your Facebook appId > save the file (as the app is not yet published, you will be able to access the application in the admin app mode)
-4. In the same */templates/login.html* > line 101, insert the Google client-id into the `data-clientid` attribute >save file
-5. Open the terminal on your machine > navigate into the app project folder > launch the vagrant environment `vagrant up` > `vagrant ssh`> `python finalproject.py`
+4. In the same */templates/login.html* > line 101, insert the Google client-id into the `data-clientid` attribute > save file
+5. Open the terminal on your machine > navigate into the app project folder > launch the vagrant environment `vagrant up` > `vagrant ssh` > `python finalproject.py`
 6. A webpage will be launched in the default browser under localhost:5000/
 7. You can now navigate the website and test it
 
@@ -36,4 +37,4 @@ In this GitHub repository you will find the following files:
 The app is thought as a dynamic environment that allows its users to constantly improve and edit the content of the app. On login (either via Google or Facebook) the user gets access to the whole content of the app and is able to edit/delete the content (restaurant names, menus, menu items, their descriptions, etc.) that he/she previously created. In order to either add, edit or delete the content the user has to fill out the form and confirm the action. All users are allowed to add new restaurants at any point in time. Once the restaurant is created, only its creator has the right to edit or delete it. In a logged out session, the users have the possibility only to consult the content of the website.
 
 ## License:
-The photos are taken from http://kaboompics.com/[http://kaboompics.com/ and are available according to kaboompics own license[https://kaboompics.com/page/license-and-faq] for free use with the exception of redistribution.
+The photos are taken from [http://kaboompics.com/](http://kaboompics.com/) and are available according to kaboompics own [license](https://kaboompics.com/page/license-and-faq) for free use with the exception of redistribution.
