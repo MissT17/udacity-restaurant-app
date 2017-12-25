@@ -152,7 +152,7 @@ def restoMenu(resto_ID):
             name_resto=name_resto
         )
     else:
-        user = session.query(User).filter_by(name=login_session['username']).one()
+        user = session.query(User).filter_by(name=login_session['username']).one()  # NOQA
         if resto.user_id != user.id:
                 return render_template(
                     'public_resto_menu.html',
