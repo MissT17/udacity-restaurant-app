@@ -38,4 +38,3 @@ The app is thought as a dynamic environment that allows its users to constantly 
 
 ## License:
 The photos are taken from [http://kaboompics.com/](http://kaboompics.com/) and are available according to kaboompics own [license](https://kaboompics.com/page/license-and-faq) for free use with the exception of redistribution.
-The photos are taken from [http://kaboompics.com/](http://kaboompics.com/) and are available according to kaboompics own [license](https://kaboompics.com/page/license-and-faq) for free use with the exception of redistribution.
