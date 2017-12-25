@@ -107,7 +107,7 @@ def editResto(resto_id):
             resto_identif=resto_id,
             name_resto=name_resto,
             resto_desc=description_resto,
-            resto_image=image_resto
+            resto_image= image_resto
         )
 
 
@@ -144,7 +144,6 @@ def restoMenu(resto_ID):
     resto = session.query(Restaurant).filter_by(id=resto_ID).one()
     menu = session.query(MenuItem).filter_by(restaurant_id=resto_ID).all()
     name_resto = resto.name
-    user = session.query(User).filter_by(name=login_session['username']).one()
     if 'username' not in login_session:
         return render_template(
             'public_resto_menu.html',
@@ -152,23 +151,25 @@ def restoMenu(resto_ID):
             menu=menu,
             name_resto=name_resto
         )
-    elif resto.user_id != user.id:
+    else:
+        user = session.query(User).filter_by(name=login_session['username']).one()
+        if resto.user_id != user.id:
+                return render_template(
+                    'public_resto_menu.html',
+                    resto_identif=resto_ID,
+                    menu=menu,
+                    name_resto=name_resto
+                )
+        else:
+            if menu == []:
+                return redirect(url_for('addNewMenuItem', resto_id=resto_ID))
             return render_template(
-                'public_resto_menu.html',
+                'resto_menu.html',
                 resto_identif=resto_ID,
                 menu=menu,
-                name_resto=name_resto
+                name_resto=name_resto,
+                creator=resto.user_id
             )
-    else:
-        if menu == []:
-            return redirect(url_for('addNewMenuItem', resto_id=resto_ID))
-        return render_template(
-            'resto_menu.html',
-            resto_identif=resto_ID,
-            menu=menu,
-            name_resto=name_resto,
-            creator=resto.user_id
-        )
 
 
 # routes that allow to execute various
