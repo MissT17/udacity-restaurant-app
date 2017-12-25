@@ -10,7 +10,7 @@ In this GitHub repository you will find the following files:
 5. *database_setup* file – contains the app database description
 6. *client_secret_new.json* & *fb_client_secrets.json* - should contain the client secrets from Google and Facebook respectively necessary for the API usage
 7. *json_format.py* - explains the serialization logic for JSON endpoints 
-8. *restaurantmenu_fn_users.db* & *restaurantmenu_fn.db* - two databases necessary for the app 
+8. *restaurantmenu_fn_users.db* - database necessary for the app 
 9. *README.md*
 
 ## Requirements
