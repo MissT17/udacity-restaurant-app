@@ -107,7 +107,7 @@ def editResto(resto_id):
             resto_identif=resto_id,
             name_resto=name_resto,
             resto_desc=description_resto,
-            resto_image= image_resto
+            resto_image=image_resto
         )
 
 
@@ -280,4 +280,3 @@ if __name__ == '__main__':
     app.secret_key = 'super_secret_key'
     app.debug = True
     app.run(host='0.0.0.0', port=5000)
-
