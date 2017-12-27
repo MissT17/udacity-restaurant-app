@@ -29,6 +29,7 @@ Base.metadata.bind = engine
 
 UPLOAD_FOLDER = './static/images'
 app.config['UPLOAD_FOLDER'] = UPLOAD_FOLDER
+app.config['MAX_CONTENT_LENGTH'] = 2 * 1024 * 1024
 
 
 DBSession = sessionmaker(bind=engine)
