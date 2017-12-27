@@ -17,6 +17,7 @@ from login import login
 import os
 from werkzeug.utils import secure_filename
 from PIL import Image
+from functools import wraps
 
 app = Flask(__name__)
 # create Blueprint to split the login (routes) of the app into 2
@@ -32,6 +33,17 @@ app.config['UPLOAD_FOLDER'] = UPLOAD_FOLDER
 
 DBSession = sessionmaker(bind=engine)
 session = DBSession()
+
+def login_required(f):
+    @wraps(f)
+    def login_user(*args, **kwargs):
+        if 'username' in login_session:
+            return f(*args, **kwargs)
+        else:
+            flash("You are not allowed to access this page without login")
+            return redirect('/login')
+    return login_user
+
 
 # the route allows to access pages that display all restaurants available
 #  in the database. One view is available for logged in and the other
@@ -54,9 +66,10 @@ def showallrestaurants():
 # restaurants (add, edit or delete them)
 
 @app.route('/restos/new', methods=['GET', 'POST'])
+@login_required
 def createNewResto():
-    if 'username' not in login_session:
-        return redirect('/login')
+    #if 'username' not in login_session:
+    #    return redirect('/login')
     if request.method == 'POST':
         file_img = request.files['file']
         filename = secure_filename(file_img.filename)
@@ -84,6 +97,7 @@ def createNewResto():
 
 
 @app.route('/restos/<int:resto_id>/edit', methods=['GET', 'POST'])
+@login_required
 def editResto(resto_id):
     restaurant = session.query(Restaurant).filter_by(id=resto_id).one()
     name_resto = restaurant.name
@@ -112,12 +126,13 @@ def editResto(resto_id):
 
 
 @app.route('/restos/<int:resto_id>/delete', methods=['GET', 'POST'])
+@login_required
 def deleteResto(resto_id):
     resto_to_delete = session.query(Restaurant).filter_by(id=resto_id).one()
     resto_name = resto_to_delete.name
     user = session.query(User).filter_by(name=login_session['username']).one()
-    if 'username' not in login_session:
-        return redirect('/login')
+    #if 'username' not in login_session:
+    #    return redirect('/login')
     if resto_to_delete.user_id != user.id:
         flash("You are not allowed to delete this content")
         return redirect(url_for('showallrestaurants'))
@@ -179,6 +194,7 @@ def restoMenu(resto_ID):
     '/restos/<int:resto_id>/menu/<int:item_id>/edit',
     methods=['GET', 'POST']
     )
+@login_required
 def editMenuItems(resto_id, item_id):
     item = session.query(MenuItem).filter_by(id=item_id).one()
     item_name = item.name
@@ -204,6 +220,7 @@ def editMenuItems(resto_id, item_id):
 
 
 @app.route('/restos/<int:resto_id>/menu/new', methods=['GET', 'POST'])
+@login_required
 def addNewMenuItem(resto_id):
     resto = session.query(Restaurant).filter_by(id=resto_id).one()
     resto_name = resto.name
@@ -228,8 +245,8 @@ def addNewMenuItem(resto_id):
 
 @app.route(
     '/restos/<int:resto_id>/menu/<int:item_id>/delete',
-    methods=['GET', 'POST']
-)
+    methods=['GET', 'POST'])
+@login_required
 def deleteMenuItem(resto_id, item_id):
     res = session.query(Restaurant).filter_by(id=resto_id).one()
     resto_name = res.name
