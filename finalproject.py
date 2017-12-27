@@ -103,6 +103,11 @@ def editResto(resto_id):
     name_resto = restaurant.name
     description_resto = restaurant.description
     image_resto = restaurant.image[15:]
+    user = session.query(User).filter_by(name=login_session['username']).one()
+    if restaurant.user_id != user.id:
+        flash("""You are not allowed to edit this content, 
+        you are allowed to edit only the restaurants that you created""")
+        return redirect(url_for('showallrestaurants'))
     if request.method == 'POST':
         if request.form['name']:
             restaurant.name = request.form['name']
@@ -198,6 +203,12 @@ def restoMenu(resto_ID):
 def editMenuItems(resto_id, item_id):
     item = session.query(MenuItem).filter_by(id=item_id).one()
     item_name = item.name
+    restaurant = session.query(Restaurant).filter_by(id=resto_id).one()
+    user = session.query(User).filter_by(name=login_session['username']).one()
+    if restaurant.user_id != user.id:
+        flash("""You are not allowed to edit this content,
+        you are allowed to edit only the restaurants that you created""")
+        return redirect(url_for('restoMenu', resto_ID=resto_id))
     if request.method == 'POST':
         if request.form['name']:
             item.name = request.form['name']
@@ -224,6 +235,11 @@ def editMenuItems(resto_id, item_id):
 def addNewMenuItem(resto_id):
     resto = session.query(Restaurant).filter_by(id=resto_id).one()
     resto_name = resto.name
+    user = session.query(User).filter_by(name=login_session['username']).one()
+    if resto.user_id != user.id:
+        flash("""You are not allowed to edit this content,
+        you are allowed to edit only the restaurants that you created""")
+        return redirect(url_for('restoMenu', resto_ID=resto_id))
     if request.method == 'POST':
         added_item = MenuItem(
             name=request.form['name'],
@@ -252,6 +268,10 @@ def deleteMenuItem(resto_id, item_id):
     resto_name = res.name
     item_to_delete = session.query(MenuItem).filter_by(id=item_id).one()
     item_name = item_to_delete.name
+    user = session.query(User).filter_by(name=login_session['username']).one()
+    if res.user_id != user.id:
+        flash("You are not allowed to delete this content")
+        return redirect(url_for('restoMenu', resto_ID=resto_id))
     if request.method == 'POST':
         session.delete(item_to_delete)
         session.commit()

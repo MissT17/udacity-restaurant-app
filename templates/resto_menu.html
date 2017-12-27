@@ -14,6 +14,15 @@
 </head>  
 <body>
     <div class="container">
+        {% with messages = get_flashed_messages() %}
+        {% if messages %}
+        <div class="col-md-12" align="left" style="margin-top:20px;">
+            {% for message in messages %}
+            <span style="font-size:20px; color: white;"><strong>{{message}} </strong></span>
+        </div>
+        {% endfor %}
+        {% endif %}
+        {% endwith %}
         <div class="col-md-12" style="text-align:right;" >
                 {% if not session['username'] %} 
                 <a style='margin: 10px 0 10px 0' href='/login' role = 'button' class ='btn btn-default'>Login</a>

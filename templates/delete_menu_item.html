@@ -14,6 +14,15 @@
 </head>  
 <body>
     <div class="container">
+        {% with messages = get_flashed_messages() %}
+        {% if messages %}
+        <div class="col-md-12" align="left" style="margin-top:20px;">
+            {% for message in messages %}
+            <span style="font-size:20px; color: white;"><strong>{{message}} </strong></span>
+        </div>
+        {% endfor %}
+        {% endif %}
+        {% endwith %}
         <h3>Please confirm the deletion of {{item_name}} from the menu of {{resto_name}}</h3>
         <form class="form-inline" action="{{url_for('deleteMenuItem', resto_id=resto, item_id=item)}}" method='POST'>
             <button class="btn btn-warning btn-lg btn-block" type='Submit' value='Delete'>Delete</button>

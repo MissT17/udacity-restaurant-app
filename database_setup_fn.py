@@ -26,6 +26,7 @@ class Restaurant(Base):
     user = relationship(User)
     description = Column(String(250))
     image = Column(String(250))
+    menu_item = relationship('MenuItem', cascade="all, delete")
 
     @property
     def serialize(self):
