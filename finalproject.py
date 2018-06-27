@@ -18,22 +18,23 @@ import os
 from werkzeug.utils import secure_filename
 from PIL import Image
 from functools import wraps
+from db_connection import login, session
 
 app = Flask(__name__)
 # create Blueprint to split the login (routes) of the app into 2
 # files(login.py contains logic for authrntication process, finalproject.py
 # contains the authorization and content logic)
 app.register_blueprint(login)
-engine = create_engine('sqlite:///restaurantmenu_fn_users.db')
-Base.metadata.bind = engine
+# engine = create_engine('sqlite:///restaurantmenu_fn_users.db')
+# Base.metadata.bind = engine
 
 UPLOAD_FOLDER = './static/images'
 app.config['UPLOAD_FOLDER'] = UPLOAD_FOLDER
 app.config['MAX_CONTENT_LENGTH'] = 2 * 1024 * 1024
 
 
-DBSession = sessionmaker(bind=engine)
-session = DBSession()
+# DBSession = sessionmaker(bind=engine)
+# session = DBSession()
 
 def login_required(f):
     @wraps(f)
