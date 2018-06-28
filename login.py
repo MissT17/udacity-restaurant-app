@@ -1,4 +1,3 @@
-from flask import Blueprint
 from flask import session as login_session
 import random
 import string
@@ -10,17 +9,9 @@ import httplib2
 import json
 from flask import make_response
 import requests
-from sqlalchemy.orm import sessionmaker
-from database_setup_fn import Base, Restaurant, MenuItem, User
-from sqlalchemy import create_engine
+from database_setup_fn import User
 from db_connection import login, session
 
-
-# login = Blueprint('login', __name__)
-# engine = create_engine('sqlite:///restaurantmenu_fn_users.db')
-# Base.metadata.bind = engine
-# DBSession = sessionmaker(bind=engine)
-# session = DBSession()
 
 CLIENT_ID = json.loads(open(
     'client_secret_new.json', 'r').read())['web']['client_id']

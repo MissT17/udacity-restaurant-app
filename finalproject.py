@@ -1,9 +1,7 @@
 from flask import Flask, render_template
 from flask import request, redirect, url_for, jsonify, flash
 from json_format import serialize, serialize_resto, serialize_item
-from sqlalchemy import create_engine
-from database_setup_fn import Base, Restaurant, MenuItem, User
-from sqlalchemy.orm import sessionmaker
+from database_setup_fn import Restaurant, MenuItem, User
 from flask import session as login_session
 import random
 import string
@@ -25,16 +23,11 @@ app = Flask(__name__)
 # files(login.py contains logic for authrntication process, finalproject.py
 # contains the authorization and content logic)
 app.register_blueprint(login)
-# engine = create_engine('sqlite:///restaurantmenu_fn_users.db')
-# Base.metadata.bind = engine
 
 UPLOAD_FOLDER = './static/images'
 app.config['UPLOAD_FOLDER'] = UPLOAD_FOLDER
 app.config['MAX_CONTENT_LENGTH'] = 2 * 1024 * 1024
 
-
-# DBSession = sessionmaker(bind=engine)
-# session = DBSession()
 
 def login_required(f):
     @wraps(f)
@@ -315,7 +308,16 @@ def menuItem(resto_id, item_id):
     return jsonify(MenuItem=item.serialize)
 
 
+# if __name__ == '__main__':
+#     app.secret_key = 'super_secret_key'
+#     app.debug = True
+#     app.run(host='0.0.0.0', port=5000)
+
+app.secret_key = 'super_secret_key'
+app.config['SESSION_TYPE'] = 'filesystem'
+# login_session.init_app(app)
+
 if __name__ == '__main__':
-    app.secret_key = 'super_secret_key'
     app.debug = True
     app.run(host='0.0.0.0', port=5000)
+
