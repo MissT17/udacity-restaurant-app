@@ -22,7 +22,7 @@ pygame==1.9.3
 pylint==1.6.4
 pytz==2016.10
 requests==2.19.1
-rsa==3.4.2
+rsa==4.1
 SimpleGUICS2Pygame==1.9.0
 six==1.10.0
 SQLAlchemy==1.2.8
