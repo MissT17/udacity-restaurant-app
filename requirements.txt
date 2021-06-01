@@ -28,6 +28,6 @@ six==1.10.0
 SQLAlchemy==1.2.8
 twilio==6.3.dev0
 uritemplate==3.0.0
-urllib3==1.23
+urllib3==1.26.5
 Werkzeug==0.12
 wrapt==1.10.8
